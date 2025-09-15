@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import TodoInput from "./TodoInput";
 import TodoItem from "./TodoItem";
@@ -6,9 +6,34 @@ import MainFooter from "./MainFooter";
 import type { Todo } from "../type";
 
 export default function Main() {
-    const [text, setText] = useState<string>("");
-    const [todos, setTodos] = useState<Todo[]>([]);
+
+    const [text, setText] = useState<string>(() => {
+        return localStorage.getItem("todoInputValue") || "";
+    });
+
+
+    const [todos, setTodos] = useState<Todo[]>(() => {
+        const saved = localStorage.getItem("todos");
+        return saved ? JSON.parse(saved) : [];
+    });
+
     const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
+
+    useEffect(() => {
+        if (todos.length > 0) {
+            localStorage.setItem("todos", JSON.stringify(todos));
+        } else {
+            localStorage.removeItem("todos");
+        }
+    }, [todos]);
+
+    useEffect(() => {
+        if (text.trim() !== "") {
+            localStorage.setItem("todoInputValue", text);
+        } else {
+            localStorage.removeItem("todoInputValue");
+        }
+    }, [text]);
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && text.trim() !== "") {
@@ -31,13 +56,21 @@ export default function Main() {
     };
 
     const clearCompleted = () => {
-        setTodos(todos.filter((todo) => !todo.completed));
+        const activeTodos = todos.filter((todo) => !todo.completed);
+        setTodos(activeTodos);
+
+        if (activeTodos.length > 0) {
+            localStorage.setItem("todos", JSON.stringify(activeTodos));
+        } else {
+            localStorage.removeItem("todos");
+        }
     };
 
     const toggleAll = () => {
         const newTodos = todos.map((todo) => ({ ...todo, completed: !allCompleted }));
         setTodos(newTodos);
     };
+
 
     const visibleTodos = todos.filter((todo) => {
         if (filter === "active") return !todo.completed;
@@ -78,7 +111,7 @@ export default function Main() {
                 <MainFooter
                     todos={todos}
                     onClearCompleted={clearCompleted}
-                    onFilterChange={(filter) => setFilter(filter as "all" | "active" | "completed")}
+                    onFilterChange={(f) => setFilter(f as "all" | "active" | "completed")}
                 />
             </div>
         </div>
