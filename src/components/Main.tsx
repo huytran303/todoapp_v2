@@ -1,0 +1,86 @@
+import { useState } from "react";
+import type { ChangeEvent, KeyboardEvent } from "react";
+import TodoInput from "./TodoInput";
+import TodoItem from "./TodoItem";
+import MainFooter from "./MainFooter";
+import type { Todo } from "../type";
+
+export default function Main() {
+    const [text, setText] = useState<string>("");
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && text.trim() !== "") {
+            const todo: Todo = {
+                id: Date.now(),
+                title: text,
+                completed: false,
+            };
+            setTodos([...todos, todo]);
+            setText("");
+        }
+    };
+
+    const allCompleted = todos.length > 0 && todos.every((todo) => todo.completed);
+
+    const toggleTodo = (index: number) => {
+        const newTodos = [...todos];
+        newTodos[index].completed = !newTodos[index].completed;
+        setTodos(newTodos);
+    };
+
+    const clearCompleted = () => {
+        setTodos(todos.filter((todo) => !todo.completed));
+    };
+
+    const toggleAll = () => {
+        const newTodos = todos.map((todo) => ({ ...todo, completed: !allCompleted }));
+        setTodos(newTodos);
+    };
+
+    const visibleTodos = todos.filter((todo) => {
+        if (filter === "active") return !todo.completed;
+        if (filter === "completed") return todo.completed;
+        return true;
+    });
+
+    return (
+        <div className="flex justify-center px-4 sm:px-6 lg:px-8">
+            <div className="my-4 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl shadow-lg rounded-lg bg-white overflow-hidden">
+                <TodoInput
+                    value={text}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onToggleAll={toggleAll}
+                    checked={allCompleted}
+                    todos={todos}
+                />
+                <div className="space-y-0">
+                    {visibleTodos.map((todo, idx) => (
+                        <TodoItem
+                            key={todo.id}
+                            todo={todo}
+                            onToggle={() => toggleTodo(idx)}
+                            onDelete={() => {
+                                const newTodos = [...todos];
+                                newTodos.splice(idx, 1);
+                                setTodos(newTodos);
+                            }}
+                            onEdit={(newTitle: string) => {
+                                const newTodos = [...todos];
+                                newTodos[idx].title = newTitle;
+                                setTodos(newTodos);
+                            }}
+                        />
+                    ))}
+                </div>
+                <MainFooter
+                    todos={todos}
+                    onClearCompleted={clearCompleted}
+                    onFilterChange={(filter) => setFilter(filter as "all" | "active" | "completed")}
+                />
+            </div>
+        </div>
+    );
+}
