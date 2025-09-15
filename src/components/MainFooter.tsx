@@ -6,7 +6,7 @@ import type { FilterStatus } from "../type"
 interface FooterProps {
     todos: Todo[];
     onClearCompleted: () => void;
-    onFilterChange: (filter: string) => void;
+    onFilterChange: (filter: FilterStatus) => void;
 }
 
 export default function MainFooter({ todos, onClearCompleted, onFilterChange }: FooterProps) {

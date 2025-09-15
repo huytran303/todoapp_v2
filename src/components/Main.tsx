@@ -106,7 +106,7 @@ export default function Main() {
                 <MainFooter
                     todos={todos}
                     onClearCompleted={clearCompleted}
-                    onFilterChange={(f) => setFilter(f as "all" | "active" | "completed")}
+                    onFilterChange={(f) => setFilter(f:FilterStatus)}
                 />
             </div>
         </div>
