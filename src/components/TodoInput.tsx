@@ -24,9 +24,8 @@ export default function TodoInput({
 
     return (
         <div className={`flex items-center h-15 border-2 ${inputFocused ? 'border-red-700' : 'border-gray-200'}`}>
-            {todos?.length > 0 && (
-                <ToggleAllButton onToggleAll={onToggleAll} checked={checked} />
-            )}
+
+            <ToggleAllButton onToggleAll={onToggleAll} checked={checked} todos={todos} />
             <input
                 className="flex-1 h-full px-3 text-lg italic text-gray-500
                placeholder:italic placeholder:text-gray-400

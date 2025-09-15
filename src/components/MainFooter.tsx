@@ -31,9 +31,10 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                     <button
                         onClick={() => handleFilterClick("all")}
                         className={classNames(
-                            "px-2 py-1 transition text-xs sm:text-sm",
-                            activeFilter === "all" &&
-                            "border border-red-700 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
+                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
+                            activeFilter === "all"
+                                ? "border border-red-700 rounded"
+                                : "border border-transparent"
                         )}
                     >
                         All
@@ -43,9 +44,10 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                     <button
                         onClick={() => handleFilterClick("active")}
                         className={classNames(
-                            "px-2 py-1 transition text-xs sm:text-sm",
-                            activeFilter === "active" &&
-                            "border border-red-700 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
+                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
+                            activeFilter === "active"
+                                ? "border border-red-700 rounded"
+                                : "border border-transparent"
                         )}
                     >
                         Active
@@ -55,9 +57,10 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                     <button
                         onClick={() => handleFilterClick("completed")}
                         className={classNames(
-                            "px-2 py-1 transition text-xs sm:text-sm",
-                            activeFilter === "completed" &&
-                            "border border-red-700 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
+                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
+                            activeFilter === "completed"
+                                ? "border border-red-700 rounded"
+                                : "border border-transparent"
                         )}
                     >
                         Completed

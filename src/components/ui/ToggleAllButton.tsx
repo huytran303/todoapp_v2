@@ -1,19 +1,20 @@
 import React from "react";
-
+import type { Todo } from '../../type'
 interface ToggleAllButtonProps {
     onToggleAll: () => void;
     checked: boolean;
+    todos: Todo[];
 }
 
-const ToggleAllButton: React.FC<ToggleAllButtonProps> = ({ onToggleAll, checked }) => {
+const ToggleAllButton: React.FC<ToggleAllButtonProps> = ({ onToggleAll, checked, todos }) => {
     return (
         <button
             onClick={onToggleAll}
             type="button"
             aria-pressed={checked}
-            className="w-12 h-full flex items-center justify-center
-                 text-gray-400 hover:text-gray-600
-                 focus:outline-none focus:ring-2 focus:ring-red-700"
+            className={`w-12 h-full flex items-center justify-center
+                 text-gray-400 
+                 focus:outline-none focus:ring-2 focus:ring-red-700 ${todos.length > 0 ? "hover:text-gray-600" : "bg-white text-white"}`}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

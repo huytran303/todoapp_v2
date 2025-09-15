@@ -58,7 +58,8 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                             onChange={onToggle}
                             className="peer hidden"
                         />
-                        <span className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:border-green-500">
+                        <span className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:border-green-500 peer-checked:after:content-['✓'] peer-checked:after:text-emerald-500 peer-checked:after:text-lg
+        peer-checked:border-emerald-500">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="w-4 h-4 text-green-500 hidden peer-checked:block"

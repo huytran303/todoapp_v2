@@ -96,8 +96,7 @@ export default function Main() {
                             todo={todo}
                             onToggle={() => toggleTodo(idx)}
                             onDelete={() => {
-                                const newTodos = [...todos];
-                                newTodos.splice(idx, 1);
+                                const newTodos = todos.filter((t) => t.id !== todo.id);
                                 setTodos(newTodos);
                             }}
                             onEdit={(newTitle: string) => {
