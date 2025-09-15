@@ -28,7 +28,7 @@ export default function Main() {
     }, [todos]);
 
     useEffect(() => {
-        if (text.trim() !== "") {
+        if (text.trim()) {
             localStorage.setItem("todoInputValue", text);
         } else {
             localStorage.removeItem("todoInputValue");
