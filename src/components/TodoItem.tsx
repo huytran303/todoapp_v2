@@ -25,11 +25,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
     function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
         if (e.key === "Enter") {
             const trimmedText = editText.trim();
-            if (trimmedText) {
-                onEdit(trimmedText);
-            } else {
-                setEditText(todo.title);
-            }
+            trimmedText ? onEdit(trimmedText) : setEditText(todo.title);
             setIsEditing(false);
         } else if (e.key === "Escape") {
             setEditText(todo.title);

@@ -20,23 +20,19 @@ export default function Main() {
     const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
 
     useEffect(() => {
-        if (todos.length > 0) {
-            localStorage.setItem("todos", JSON.stringify(todos));
-        } else {
-            localStorage.removeItem("todos");
-        }
+        todos.length > 0
+            ? localStorage.setItem("todos", JSON.stringify(todos))
+            : localStorage.removeItem("todos");
     }, [todos]);
 
     useEffect(() => {
-        if (text.trim()) {
-            localStorage.setItem("todoInputValue", text);
-        } else {
-            localStorage.removeItem("todoInputValue");
-        }
+        text.trim()
+            ? localStorage.setItem("todoInputValue", text)
+            : localStorage.removeItem("todoInputValue");
     }, [text]);
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && text.trim() !== "") {
+        if (e.key === "Enter" && text.trim()) {
             const todo: Todo = {
                 id: Date.now(),
                 title: text,
@@ -59,11 +55,9 @@ export default function Main() {
         const activeTodos = todos.filter((todo) => !todo.completed);
         setTodos(activeTodos);
 
-        if (activeTodos.length > 0) {
-            localStorage.setItem("todos", JSON.stringify(activeTodos));
-        } else {
-            localStorage.removeItem("todos");
-        }
+        activeTodos.length > 0
+            ? localStorage.setItem("todos", JSON.stringify(activeTodos))
+            : localStorage.removeItem("todos");
     };
 
     const toggleAll = () => {
@@ -73,9 +67,11 @@ export default function Main() {
 
 
     const visibleTodos = todos.filter((todo) => {
-        if (filter === "active") return !todo.completed;
-        if (filter === "completed") return todo.completed;
-        return true;
+        return filter === "active"
+            ? !todo.completed
+            : filter === "completed"
+                ? todo.completed
+                : true;
     });
 
     return (
