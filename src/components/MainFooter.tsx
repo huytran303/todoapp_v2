@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "../lib/utils";
 import type { Todo } from "../type";
 import type { FilterStatus } from "../type"
 
@@ -12,9 +12,7 @@ interface FooterProps {
 export default function MainFooter({ todos, onClearCompleted, onFilterChange }: FooterProps) {
     const [activeFilter, setActiveFilter] = useState<FilterStatus>("all");
 
-    const activeTodos = todos.filter(function (todo) {
-        return !todo.completed;
-    });
+    const activeTodos = todos.filter((todo) => !todo.completed);
 
     function handleFilterClick(filter: FilterStatus) {
         setActiveFilter(filter);
@@ -26,18 +24,18 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
     return (
         <footer className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 text-xs sm:text-sm text-gray-600 gap-2 sm:gap-0 w-full">
             <span className="order-1 sm:order-none flex-shrink-0">
-                {activeTodos.length} {activeTodos.length === 1 ? "item left" : "items left"}
+                {activeTodos.length} {activeTodos.length === 1 && "item left"}{activeTodos.length !== 1 && "items left"}
             </span>
 
             <ul className="flex gap-2 sm:gap-3 order-2 sm:order-none">
                 <li>
                     <button
-                        onClick={function () { handleFilterClick("all"); }}
-                        className={twMerge(
+                        onClick={() => handleFilterClick("all")}
+                        className={cn(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
-                            activeFilter === "all"
-                                ? "border border-red-700 rounded"
-                                : "border border-transparent"
+                            "border",
+                            activeFilter === "all" && "border-red-700 rounded",
+                            activeFilter !== "all" && "border-transparent"
                         )}
                     >
                         All
@@ -45,12 +43,12 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                 </li>
                 <li>
                     <button
-                        onClick={function () { handleFilterClick("active"); }}
-                        className={twMerge(
+                        onClick={() => handleFilterClick("active")}
+                        className={cn(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
-                            activeFilter === "active"
-                                ? "border border-red-700 rounded"
-                                : "border border-transparent"
+                            "border",
+                            activeFilter === "active" && "border-red-700 rounded",
+                            activeFilter !== "active" && "border-transparent"
                         )}
                     >
                         Active
@@ -58,12 +56,12 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                 </li>
                 <li>
                     <button
-                        onClick={function () { handleFilterClick("completed"); }}
-                        className={twMerge(
+                        onClick={() => handleFilterClick("completed")}
+                        className={cn(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
-                            activeFilter === "completed"
-                                ? "border border-red-700 rounded"
-                                : "border border-transparent"
+                            "border",
+                            activeFilter === "completed" && "border-red-700 rounded",
+                            activeFilter !== "completed" && "border-transparent"
                         )}
                     >
                         Completed

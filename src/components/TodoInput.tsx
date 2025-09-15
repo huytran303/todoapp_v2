@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
+import { cn } from "../lib/utils";
 import ToggleAllButton from "./ui/ToggleAllButton";
 import type { Todo } from "../type";
 
@@ -23,7 +24,11 @@ export default function TodoInput({
     const [inputFocused, setInputFocused] = useState(false);
 
     return (
-        <div className={`flex items-center h-15 border-2 ${inputFocused ? 'border-red-700' : 'border-gray-200'}`}>
+        <div className={cn(
+            "flex items-center h-15 border-2",
+            inputFocused && "border-red-700",
+            !inputFocused && "border-gray-200"
+        )}>
 
             <ToggleAllButton onToggleAll={onToggleAll} checked={checked} todos={todos} />
             <input

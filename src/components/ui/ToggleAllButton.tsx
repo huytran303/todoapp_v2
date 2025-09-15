@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "../../lib/utils";
 import type { Todo } from '../../type'
 interface ToggleAllButtonProps {
     onToggleAll: () => void;
@@ -12,9 +13,11 @@ const ToggleAllButton: React.FC<ToggleAllButtonProps> = ({ onToggleAll, checked,
             onClick={onToggleAll}
             type="button"
             aria-pressed={checked}
-            className={`w-12 h-full flex items-center justify-center
-                 text-gray-400 
-                 focus:outline-none focus:ring-2 focus:ring-red-700 ${todos.length > 0 ? "hover:text-gray-600" : "bg-white text-white"}`}
+            className={cn(
+                "w-12 h-full flex items-center justify-center text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700",
+                todos.length > 0 && "hover:text-gray-600",
+                todos.length === 0 && "bg-white text-white"
+            )}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
+import { cn } from "../lib/utils";
 import type { Todo } from "../type";
 
 interface TodoItemProps {
@@ -78,10 +79,11 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                     </label>
                     <span
                         onDoubleClick={handleDoubleClick}
-                        className={
-                            (todo.completed ? "line-through text-gray-400" : "text-gray-800") +
-                            " flex-1 min-w-0 whitespace-normal break-words text-sm sm:text-base cursor-pointer pr-2"
-                        }
+                        className={cn(
+                            "flex-1 min-w-0 whitespace-normal break-words text-sm sm:text-base cursor-pointer pr-2",
+                            todo.completed && "line-through text-gray-400",
+                            !todo.completed && "text-gray-800"
+                        )}
                     >
                         {todo.title}
                     </span>
