@@ -1,4 +1,5 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
+import { useEffect } from "react";
 import type { Todo } from "../type";
 import ToggleAllButton from "./ui/ToggleAllButton";
 
@@ -19,6 +20,10 @@ export default function TodoInput({
     checked,
     todos,
 }: TodoInputProps) {
+    useEffect(() => {
+        localStorage.setItem('todoInputValue', value);
+    }, [value]);
+
     return (
         <div className="flex items-center w-full shadow-sm border-b border-gray-200">
             {todos?.length > 0 ? (
