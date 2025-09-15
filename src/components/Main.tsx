@@ -79,8 +79,8 @@ export default function Main() {
     });
 
     return (
-        <div className="flex justify-center px-4 sm:px-6 lg:px-8">
-            <div className="my-4 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl shadow-lg rounded-lg bg-white overflow-hidden">
+        <div className="flex justify-center sm:px-6 lg:px-8">
+            <div className="my-4 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl shadow-lg  bg-white overflow-hidden">
                 <TodoInput
                     value={text}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}

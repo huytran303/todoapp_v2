@@ -21,7 +21,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
     if (todos.length === 0) return null;
 
     return (
-        <footer className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 border-t text-xs sm:text-sm text-gray-600 gap-2 sm:gap-0 w-full">
+        <footer className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 text-xs sm:text-sm text-gray-600 gap-2 sm:gap-0 w-full">
             <span className="order-1 sm:order-none flex-shrink-0">
                 {activeTodos.length} {activeTodos.length === 1 ? "item left" : "items left"}
             </span>
@@ -33,7 +33,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                         className={classNames(
                             "px-2 py-1 transition text-xs sm:text-sm",
                             activeFilter === "all" &&
-                            "border border-red-400 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
+                            "border border-red-700 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
                         )}
                     >
                         All
@@ -45,7 +45,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                         className={classNames(
                             "px-2 py-1 transition text-xs sm:text-sm",
                             activeFilter === "active" &&
-                            "border border-red-400 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
+                            "border border-red-700 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
                         )}
                     >
                         Active
@@ -57,7 +57,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                         className={classNames(
                             "px-2 py-1 transition text-xs sm:text-sm",
                             activeFilter === "completed" &&
-                            "border border-red-400 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
+                            "border border-red-700 rounded shadow-[0_0_4px_rgba(239,68,68,0.6)]"
                         )}
                     >
                         Completed

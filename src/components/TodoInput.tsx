@@ -1,7 +1,7 @@
+import { useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
-import { useEffect } from "react";
-import type { Todo } from "../type";
 import ToggleAllButton from "./ui/ToggleAllButton";
+import type { Todo } from "../type";
 
 interface TodoInputProps {
     value: string;
@@ -20,22 +20,26 @@ export default function TodoInput({
     checked,
     todos,
 }: TodoInputProps) {
-    useEffect(() => {
-        localStorage.setItem('todoInputValue', value);
-    }, [value]);
+    const [inputFocused, setInputFocused] = useState(false);
 
     return (
-        <div className="flex items-center w-full shadow-sm border-b border-gray-200">
-            {todos?.length > 0 ? (
+        <div className={`flex items-center h-15 border-2 ${inputFocused ? 'border-red-700' : 'border-gray-200'}`}>
+            {todos?.length > 0 && (
                 <ToggleAllButton onToggleAll={onToggleAll} checked={checked} />
-            ) : null}
+            )}
             <input
-                className="flex-1 w-full p-3 sm:p-4 text-lg sm:text-xl md:text-2xl italic text-gray-500 placeholder:text-lg sm:placeholder:text-xl md:placeholder:text-2xl placeholder:italic placeholder:text-gray-400 outline-none border-0 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                className="flex-1 h-full px-3 text-lg italic text-gray-500
+               placeholder:italic placeholder:text-gray-400
+               outline-none border-0"
                 placeholder="What needs to be done?"
                 value={value}
                 onChange={onChange}
                 onKeyDown={onKeyDown}
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
             />
         </div>
+
+
     );
 }
