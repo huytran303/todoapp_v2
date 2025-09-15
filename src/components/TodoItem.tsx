@@ -64,7 +64,8 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                             onChange={onToggle}
                             className="peer hidden"
                         />
-                        <span className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:border-green-500">
+                        <span className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:border-green-500 peer-checked:after:content-['✓'] peer-checked:after:text-emerald-500 peer-checked:after:text-lg
+        peer-checked:border-emerald-500">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="w-4 h-4 text-green-500 hidden peer-checked:block"
@@ -80,9 +81,10 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                     <span
                         onDoubleClick={handleDoubleClick}
                         className={cn(
-                            "flex-1 min-w-0 whitespace-normal break-words text-sm sm:text-base cursor-pointer pr-2",
-                            todo.completed && "line-through text-gray-400",
-                            !todo.completed && "text-gray-800"
+                            "flex-1 min-w-0 whitespace-normal break-words text-sm sm:text-base cursor-pointer pr-2 text-gray-800",
+                            {
+                                "line-through text-gray-400": todo.completed,
+                            }
                         )}
                     >
                         {todo.title}

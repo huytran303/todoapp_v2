@@ -15,8 +15,10 @@ const ToggleAllButton: React.FC<ToggleAllButtonProps> = ({ onToggleAll, checked,
             aria-pressed={checked}
             className={cn(
                 "w-12 h-full flex items-center justify-center text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700",
-                todos.length > 0 && "hover:text-gray-600",
-                todos.length === 0 && "bg-white text-white"
+                {
+                    "hover:text-gray-600": todos.length > 0,
+                    "bg-white text-white": !todos.length
+                }
             )}
         >
             <svg

@@ -3,27 +3,24 @@ import type { ChangeEvent, KeyboardEvent } from "react";
 import TodoInput from "./TodoInput";
 import TodoItem from "./TodoItem";
 import MainFooter from "./MainFooter";
-import type { Todo } from "../type";
-import type { FilterStatus } from "../type";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    editTodo,
+    toggleAllTodos,
+    clearCompletedTodos,
+    setFilter
+} from "../store/todoSlice";
+
 export default function Main() {
+    const dispatch = useAppDispatch();
+    const { items: todos, filter } = useAppSelector((state) => state.todos);
 
     const [text, setText] = useState<string>(() => {
         return localStorage.getItem("todoInputValue") || "";
     });
-
-
-    const [todos, setTodos] = useState<Todo[]>(() => {
-        const saved = localStorage.getItem("todos");
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [filter, setFilter] = useState<FilterStatus>("all");
-
-    useEffect(() => {
-        todos.length > 0
-            ? localStorage.setItem("todos", JSON.stringify(todos))
-            : localStorage.removeItem("todos");
-    }, [todos]);
 
     useEffect(() => {
         text.trim()
@@ -33,38 +30,36 @@ export default function Main() {
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && text.trim()) {
-            const todo: Todo = {
-                id: Date.now(),
-                title: text,
-                completed: false,
-            };
-            setTodos([...todos, todo]);
+            dispatch(addTodo(text.trim()));
             setText("");
         }
     };
 
     const allCompleted = todos.length > 0 && todos.every((todo) => todo.completed);
 
-    const toggleTodo = (index: number) => {
-        const newTodos = [...todos];
-        newTodos[index].completed = !newTodos[index].completed;
-        setTodos(newTodos);
+    const handleToggleTodo = (id: number) => {
+        dispatch(toggleTodo(id));
     };
 
-    const clearCompleted = () => {
-        const activeTodos = todos.filter((todo) => !todo.completed);
-        setTodos(activeTodos);
-
-        activeTodos.length > 0
-            ? localStorage.setItem("todos", JSON.stringify(activeTodos))
-            : localStorage.removeItem("todos");
+    const handleDeleteTodo = (id: number) => {
+        dispatch(deleteTodo(id));
     };
 
-    const toggleAll = () => {
-        const newTodos = todos.map((todo) => ({ ...todo, completed: !allCompleted }));
-        setTodos(newTodos);
+    const handleEditTodo = (id: number, title: string) => {
+        dispatch(editTodo({ id, title }));
     };
 
+    const handleToggleAll = () => {
+        dispatch(toggleAllTodos());
+    };
+
+    const handleClearCompleted = () => {
+        dispatch(clearCompletedTodos());
+    };
+
+    const handleFilterChange = (newFilter: typeof filter) => {
+        dispatch(setFilter(newFilter));
+    };
 
     const visibleTodos = todos.filter((todo) => {
         return filter === "active"
@@ -81,32 +76,25 @@ export default function Main() {
                     value={text}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    onToggleAll={toggleAll}
+                    onToggleAll={handleToggleAll}
                     checked={allCompleted}
                     todos={todos}
                 />
                 <div className="space-y-0">
-                    {visibleTodos.map((todo, idx) => (
+                    {visibleTodos.map((todo) => (
                         <TodoItem
                             key={todo.id}
                             todo={todo}
-                            onToggle={() => toggleTodo(idx)}
-                            onDelete={() => {
-                                const newTodos = todos.filter((t) => t.id !== todo.id);
-                                setTodos(newTodos);
-                            }}
-                            onEdit={(newTitle: string) => {
-                                const newTodos = [...todos];
-                                newTodos[idx].title = newTitle;
-                                setTodos(newTodos);
-                            }}
+                            onToggle={() => handleToggleTodo(todo.id)}
+                            onDelete={() => handleDeleteTodo(todo.id)}
+                            onEdit={(newTitle: string) => handleEditTodo(todo.id, newTitle)}
                         />
                     ))}
                 </div>
                 <MainFooter
                     todos={todos}
-                    onClearCompleted={clearCompleted}
-                    onFilterChange={(f) => setFilter(f:FilterStatus)}
+                    onClearCompleted={handleClearCompleted}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </div>

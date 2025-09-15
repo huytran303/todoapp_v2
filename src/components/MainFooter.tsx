@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { cn } from "../lib/utils";
 import type { Todo } from "../type";
-import type { FilterStatus } from "../type"
+import type { FilterStatus } from "../type";
+import { useAppSelector } from "../store/hooks";
 
 interface FooterProps {
     todos: Todo[];
@@ -10,12 +10,11 @@ interface FooterProps {
 }
 
 export default function MainFooter({ todos, onClearCompleted, onFilterChange }: FooterProps) {
-    const [activeFilter, setActiveFilter] = useState<FilterStatus>("all");
+    const activeFilter = useAppSelector((state) => state.todos.filter);
 
     const activeTodos = todos.filter((todo) => !todo.completed);
 
     function handleFilterClick(filter: FilterStatus) {
-        setActiveFilter(filter);
         onFilterChange(filter);
     }
 
@@ -32,10 +31,10 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                     <button
                         onClick={() => handleFilterClick("all")}
                         className={cn(
-                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
-                            "border",
-                            activeFilter === "all" && "border-red-700 rounded",
-                            activeFilter !== "all" && "border-transparent"
+                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
+                            {
+                                "border-red-700 rounded": activeFilter === "all",
+                            }
                         )}
                     >
                         All
@@ -45,10 +44,10 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                     <button
                         onClick={() => handleFilterClick("active")}
                         className={cn(
-                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
-                            "border",
-                            activeFilter === "active" && "border-red-700 rounded",
-                            activeFilter !== "active" && "border-transparent"
+                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
+                            {
+                                "border-red-700 rounded": activeFilter === "active",
+                            }
                         )}
                     >
                         Active
@@ -58,10 +57,10 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                     <button
                         onClick={() => handleFilterClick("completed")}
                         className={cn(
-                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
-                            "border",
-                            activeFilter === "completed" && "border-red-700 rounded",
-                            activeFilter !== "completed" && "border-transparent"
+                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
+                            {
+                                "border-red-700 rounded": activeFilter === "completed",
+                            }
                         )}
                     >
                         Completed
