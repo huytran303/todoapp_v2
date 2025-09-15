@@ -1,6 +1,7 @@
 import { useState } from "react";
-import classNames from "classnames";
+import { twMerge } from "tailwind-merge";
 import type { Todo } from "../type";
+import type { FilterStatus } from "../type"
 
 interface FooterProps {
     todos: Todo[];
@@ -9,14 +10,16 @@ interface FooterProps {
 }
 
 export default function MainFooter({ todos, onClearCompleted, onFilterChange }: FooterProps) {
-    const [activeFilter, setActiveFilter] = useState("all");
+    const [activeFilter, setActiveFilter] = useState<FilterStatus>("all");
 
-    const activeTodos = todos.filter((todo) => !todo.completed)
+    const activeTodos = todos.filter(function (todo) {
+        return !todo.completed;
+    });
 
-    const handleFilterClick = (filter: string) => {
+    function handleFilterClick(filter: FilterStatus) {
         setActiveFilter(filter);
         onFilterChange(filter);
-    };
+    }
 
     if (todos.length === 0) return null;
 
@@ -29,8 +32,8 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
             <ul className="flex gap-2 sm:gap-3 order-2 sm:order-none">
                 <li>
                     <button
-                        onClick={() => handleFilterClick("all")}
-                        className={classNames(
+                        onClick={function () { handleFilterClick("all"); }}
+                        className={twMerge(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
                             activeFilter === "all"
                                 ? "border border-red-700 rounded"
@@ -42,8 +45,8 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                 </li>
                 <li>
                     <button
-                        onClick={() => handleFilterClick("active")}
-                        className={classNames(
+                        onClick={function () { handleFilterClick("active"); }}
+                        className={twMerge(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
                             activeFilter === "active"
                                 ? "border border-red-700 rounded"
@@ -55,8 +58,8 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                 </li>
                 <li>
                     <button
-                        onClick={() => handleFilterClick("completed")}
-                        className={classNames(
+                        onClick={function () { handleFilterClick("completed"); }}
+                        className={twMerge(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none",
                             activeFilter === "completed"
                                 ? "border border-red-700 rounded"

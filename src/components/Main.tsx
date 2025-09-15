@@ -4,7 +4,7 @@ import TodoInput from "./TodoInput";
 import TodoItem from "./TodoItem";
 import MainFooter from "./MainFooter";
 import type { Todo } from "../type";
-
+import type { FilterStatus } from "../type";
 export default function Main() {
 
     const [text, setText] = useState<string>(() => {
@@ -17,7 +17,7 @@ export default function Main() {
         return saved ? JSON.parse(saved) : [];
     });
 
-    const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
+    const [filter, setFilter] = useState<FilterStatus>("all");
 
     useEffect(() => {
         todos.length > 0
