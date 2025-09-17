@@ -4,15 +4,7 @@ import TodoInput from "./TodoInput";
 import TodoItem from "./TodoItem";
 import MainFooter from "./MainFooter";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import {
-    addTodo,
-    toggleTodo,
-    deleteTodo,
-    editTodo,
-    toggleAllTodos,
-    clearCompletedTodos,
-    setFilter
-} from "../store/todoSlice";
+import { addTodo } from "../store/todoSlice";
 
 export default function Main() {
     const dispatch = useAppDispatch();
@@ -28,38 +20,12 @@ export default function Main() {
             : localStorage.removeItem("todoInputValue");
     }, [text]);
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
         if (e.key === "Enter" && text.trim()) {
             dispatch(addTodo(text.trim()));
             setText("");
         }
-    };
-
-    const allCompleted = todos.length > 0 && todos.every((todo) => todo.completed);
-
-    const handleToggleTodo = (id: number) => {
-        dispatch(toggleTodo(id));
-    };
-
-    const handleDeleteTodo = (id: number) => {
-        dispatch(deleteTodo(id));
-    };
-
-    const handleEditTodo = (id: number, title: string) => {
-        dispatch(editTodo({ id, title }));
-    };
-
-    const handleToggleAll = () => {
-        dispatch(toggleAllTodos());
-    };
-
-    const handleClearCompleted = () => {
-        dispatch(clearCompletedTodos());
-    };
-
-    const handleFilterChange = (newFilter: typeof filter) => {
-        dispatch(setFilter(newFilter));
-    };
+    }
 
     const visibleTodos = todos.filter((todo) => {
         return filter === "active"
@@ -76,26 +42,13 @@ export default function Main() {
                     value={text}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    onToggleAll={handleToggleAll}
-                    checked={allCompleted}
-                    todos={todos}
                 />
                 <div className="space-y-0">
                     {visibleTodos.map((todo) => (
-                        <TodoItem
-                            key={todo.id}
-                            todo={todo}
-                            onToggle={() => handleToggleTodo(todo.id)}
-                            onDelete={() => handleDeleteTodo(todo.id)}
-                            onEdit={(newTitle: string) => handleEditTodo(todo.id, newTitle)}
-                        />
+                        <TodoItem key={todo.id} todo={todo} />
                     ))}
                 </div>
-                <MainFooter
-                    todos={todos}
-                    onClearCompleted={handleClearCompleted}
-                    onFilterChange={handleFilterChange}
-                />
+                <MainFooter />
             </div>
         </div>
     );

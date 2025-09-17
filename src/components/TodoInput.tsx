@@ -2,24 +2,17 @@ import { useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import { cn } from "../lib/utils";
 import ToggleAllButton from "./ui/ToggleAllButton";
-import type { Todo } from "../type";
 
 interface TodoInputProps {
     value: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-    onToggleAll: () => void;
-    checked: boolean;
-    todos: Todo[];
 }
 
 export default function TodoInput({
     value,
     onChange,
     onKeyDown,
-    onToggleAll,
-    checked,
-    todos,
 }: TodoInputProps) {
     const [inputFocused, setInputFocused] = useState(false);
 
@@ -31,7 +24,7 @@ export default function TodoInput({
             }
         )}>
 
-            <ToggleAllButton onToggleAll={onToggleAll} checked={checked} todos={todos} />
+            <ToggleAllButton />
             <input
                 className="flex-1 h-full px-3 text-lg italic text-gray-500
                placeholder:italic placeholder:text-gray-400

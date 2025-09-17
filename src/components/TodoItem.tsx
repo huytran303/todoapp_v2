@@ -1,16 +1,16 @@
 import { useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import { cn } from "../lib/utils";
+import { useAppDispatch } from "../store/hooks";
+import { toggleTodo, deleteTodo, editTodo } from "../store/todoSlice";
 import type { Todo } from "../type";
 
 interface TodoItemProps {
     todo: Todo;
-    onToggle: () => void;
-    onDelete: () => void;
-    onEdit: (newTitle: string) => void;
 }
 
-export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
+export default function TodoItem({ todo }: TodoItemProps) {
+    const dispatch = useAppDispatch();
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(todo.title);
 
@@ -27,7 +27,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
         if (e.key === "Enter") {
             const trimmedText = editText.trim();
             if (trimmedText) {
-                onEdit(trimmedText);
+                dispatch(editTodo({ id: todo.id, title: trimmedText }));
                 setIsEditing(false);
             }
 
@@ -40,6 +40,14 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
     function handleBlur() {
         setEditText(todo.title);
         setIsEditing(false);
+    }
+
+    function handleToggle() {
+        dispatch(toggleTodo(todo.id));
+    }
+
+    function handleDelete() {
+        dispatch(deleteTodo(todo.id));
     }
 
     return (
@@ -61,7 +69,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                         <input
                             type="checkbox"
                             checked={todo.completed}
-                            onChange={onToggle}
+                            onChange={handleToggle}
                             className="peer hidden"
                         />
                         <span className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:border-green-500 peer-checked:after:content-['✓'] peer-checked:after:text-emerald-500 peer-checked:after:text-lg
@@ -90,7 +98,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                         {todo.title}
                     </span>
                     <button
-                        onClick={onDelete}
+                        onClick={handleDelete}
                         className="hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity text-lg sm:text-xl flex-shrink-0 w-6 h-6 flex items-center justify-center"
                     >
                         X

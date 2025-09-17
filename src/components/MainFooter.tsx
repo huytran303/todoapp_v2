@@ -1,21 +1,32 @@
 import { cn } from "../lib/utils";
-import type { Todo } from "../type";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setFilter, clearCompletedTodos } from "../store/todoSlice";
 import type { FilterStatus } from "../type";
-import { useAppSelector } from "../store/hooks";
 
-interface FooterProps {
-    todos: Todo[];
-    onClearCompleted: () => void;
-    onFilterChange: (filter: FilterStatus) => void;
-}
-
-export default function MainFooter({ todos, onClearCompleted, onFilterChange }: FooterProps) {
-    const activeFilter = useAppSelector((state) => state.todos.filter);
+export default function MainFooter() {
+    const dispatch = useAppDispatch();
+    const { items: todos, filter: activeFilter } = useAppSelector((state) => state.todos);
 
     const activeTodos = todos.filter((todo) => !todo.completed);
 
     function handleFilterClick(filter: FilterStatus) {
-        onFilterChange(filter);
+        dispatch(setFilter(filter));
+    }
+
+    function handleClearCompleted() {
+        dispatch(clearCompletedTodos());
+    }
+
+    function handleAllClick() {
+        handleFilterClick("all");
+    }
+
+    function handleActiveClick() {
+        handleFilterClick("active");
+    }
+
+    function handleCompletedClick() {
+        handleFilterClick("completed");
     }
 
     if (todos.length === 0) return null;
@@ -29,7 +40,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
             <ul className="flex gap-2 sm:gap-3 order-2 sm:order-none">
                 <li>
                     <button
-                        onClick={() => handleFilterClick("all")}
+                        onClick={handleAllClick}
                         className={cn(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
                             {
@@ -42,7 +53,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                 </li>
                 <li>
                     <button
-                        onClick={() => handleFilterClick("active")}
+                        onClick={handleActiveClick}
                         className={cn(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
                             {
@@ -55,7 +66,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
                 </li>
                 <li>
                     <button
-                        onClick={() => handleFilterClick("completed")}
+                        onClick={handleCompletedClick}
                         className={cn(
                             "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
                             {
@@ -70,7 +81,7 @@ export default function MainFooter({ todos, onClearCompleted, onFilterChange }: 
 
             <button
                 className="hover:underline text-xs sm:text-sm order-3 sm:order-none flex-shrink-0"
-                onClick={onClearCompleted}
+                onClick={handleClearCompleted}
             >
                 Clear completed
             </button>

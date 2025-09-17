@@ -1,18 +1,21 @@
-import React from "react";
 import { cn } from "../../lib/utils";
-import type { Todo } from '../../type'
-interface ToggleAllButtonProps {
-    onToggleAll: () => void;
-    checked: boolean;
-    todos: Todo[];
-}
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { toggleAllTodos } from "../../store/todoSlice";
 
-const ToggleAllButton: React.FC<ToggleAllButtonProps> = ({ onToggleAll, checked, todos }) => {
+export default function ToggleAllButton() {
+    const dispatch = useAppDispatch();
+    const todos = useAppSelector((state) => state.todos.items);
+    const allCompleted = todos.length > 0 && todos.every((todo) => todo.completed);
+
+    function handleToggleAll() {
+        dispatch(toggleAllTodos());
+    }
+
     return (
         <button
-            onClick={onToggleAll}
+            onClick={handleToggleAll}
             type="button"
-            aria-pressed={checked}
+            aria-pressed={allCompleted}
             className={cn(
                 "w-12 h-full flex items-center justify-center text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700",
                 {
@@ -33,11 +36,4 @@ const ToggleAllButton: React.FC<ToggleAllButtonProps> = ({ onToggleAll, checked,
             </svg>
         </button>
     );
-};
-
-
-
-
-
-
-export default ToggleAllButton;
+}
