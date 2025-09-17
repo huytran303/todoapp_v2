@@ -1,12 +1,10 @@
-import { cn } from "../lib/utils";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setFilter, clearCompletedTodos } from "../store/todoSlice";
 import type { FilterStatus } from "../type";
+import FilterButton from "./ui/FilterButton";
 
 export default function MainFooter() {
     const { items: todos, filter: activeFilter } = useAppSelector((state) => state.todos);
-
-    if (todos.length === 0) return null;
 
     const dispatch = useAppDispatch();
     const activeTodos = todos.filter((todo) => !todo.completed);
@@ -15,6 +13,7 @@ export default function MainFooter() {
         dispatch(setFilter(filter));
     }
 
+    if (todos.length === 0) return null;
     return (
         <footer className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 text-xs sm:text-sm text-gray-600 gap-2 sm:gap-0 w-full">
             <span className="order-1 sm:order-none flex-shrink-0">
@@ -22,45 +21,15 @@ export default function MainFooter() {
             </span>
 
             <ul className="flex gap-2 sm:gap-3 order-2 sm:order-none">
-                <li>
-                    <button
-                        onClick={() => handleFilterClick("all")}
-                        className={cn(
-                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
-                            {
-                                "border-red-700 rounded": activeFilter === "all",
-                            }
-                        )}
-                    >
-                        All
-                    </button>
-                </li>
-                <li>
-                    <button
-                        onClick={() => handleFilterClick("active")}
-                        className={cn(
-                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
-                            {
-                                "border-red-700 rounded": activeFilter === "active",
-                            }
-                        )}
-                    >
-                        Active
-                    </button>
-                </li>
-                <li>
-                    <button
-                        onClick={() => handleFilterClick("completed")}
-                        className={cn(
-                            "px-2 py-1 transition text-xs sm:text-sm hover:border hover:border-red-700 focus:ring-2 focus:ring-red-300 focus:outline-none border border-transparent",
-                            {
-                                "border-red-700 rounded": activeFilter === "completed",
-                            }
-                        )}
-                    >
-                        Completed
-                    </button>
-                </li>
+                <FilterButton filter="all" activeFilter={activeFilter} onClick={handleFilterClick}>
+                    All
+                </FilterButton>
+                <FilterButton filter="active" activeFilter={activeFilter} onClick={handleFilterClick}>
+                    Active
+                </FilterButton>
+                <FilterButton filter="completed" activeFilter={activeFilter} onClick={handleFilterClick}>
+                    Completed
+                </FilterButton>
             </ul>
 
             <button
