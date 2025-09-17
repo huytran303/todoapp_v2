@@ -14,6 +14,14 @@ const initialState: TodoState = {
     filter: "all"
 };
 
+function saveTodos(items: Todo[]) {
+    if (items.length > 0) {
+        localStorage.setItem("todos", JSON.stringify(items));
+    } else {
+        localStorage.removeItem("todos");
+    }
+}
+
 const todoSlice = createSlice({
     name: 'todos',
     initialState,
@@ -25,32 +33,27 @@ const todoSlice = createSlice({
                 completed: false,
             };
             state.items.push(todo);
-            localStorage.setItem("todos", JSON.stringify(state.items));
+            saveTodos(state.items);
         },
 
         toggleTodo: (state, action: PayloadAction<number>) => {
             const todo = state.items.find(todo => todo.id === action.payload);
             if (todo) {
                 todo.completed = !todo.completed;
-                localStorage.setItem("todos", JSON.stringify(state.items));
+                saveTodos(state.items);
             }
         },
 
         deleteTodo: (state, action: PayloadAction<number>) => {
             state.items = state.items.filter(todo => todo.id !== action.payload);
-
-            if (state.items.length > 0) {
-                localStorage.setItem("todos", JSON.stringify(state.items));
-            } else {
-                localStorage.removeItem("todos");
-            }
+            saveTodos(state.items);
         },
 
         editTodo: (state, action: PayloadAction<{ id: number; title: string }>) => {
             const todo = state.items.find(todo => todo.id === action.payload.id);
             if (todo) {
                 todo.title = action.payload.title;
-                localStorage.setItem("todos", JSON.stringify(state.items));
+                saveTodos(state.items);
             }
         },
 
@@ -59,17 +62,12 @@ const todoSlice = createSlice({
             state.items.forEach(todo => {
                 todo.completed = !allCompleted;
             });
-            localStorage.setItem("todos", JSON.stringify(state.items));
+            saveTodos(state.items);
         },
 
         clearCompletedTodos: (state) => {
             state.items = state.items.filter(todo => !todo.completed);
-
-            if (state.items.length > 0) {
-                localStorage.setItem("todos", JSON.stringify(state.items));
-            } else {
-                localStorage.removeItem("todos");
-            }
+            saveTodos(state.items);
         },
 
         setFilter: (state, action: PayloadAction<FilterStatus>) => {

@@ -21,18 +21,16 @@ export default function Main() {
     }, [text]);
 
     function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-        if (e.key === "Enter" && text.trim()) {
-            dispatch(addTodo(text.trim()));
-            setText("");
-        }
+        if (e.key !== "Enter" || !text.trim()) return;
+
+        dispatch(addTodo(text.trim()));
+        setText("");
     }
 
     const visibleTodos = todos.filter((todo) => {
-        return filter === "active"
-            ? !todo.completed
-            : filter === "completed"
-                ? todo.completed
-                : true;
+        if (filter === "active") return !todo.completed;
+        if (filter === "completed") return todo.completed;
+        return true;
     });
 
     return (

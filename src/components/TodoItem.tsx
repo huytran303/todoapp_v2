@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ChangeEvent, KeyboardEvent } from "react";
 import { cn } from "../lib/utils";
 import { useAppDispatch } from "../store/hooks";
 import { toggleTodo, deleteTodo, editTodo } from "../store/todoSlice";
@@ -14,24 +13,17 @@ export default function TodoItem({ todo }: TodoItemProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(todo.title);
 
-    function handleDoubleClick() {
-        setIsEditing(true);
-        setEditText(todo.title);
-    }
-
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        setEditText(e.target.value);
-    }
-
-    function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === "Enter") {
             const trimmedText = editText.trim();
-            if (trimmedText) {
-                dispatch(editTodo({ id: todo.id, title: trimmedText }));
-                setIsEditing(false);
-            }
+            if (!trimmedText) return;
 
-        } else if (e.key === "Escape") {
+            dispatch(editTodo({ id: todo.id, title: trimmedText }));
+            setIsEditing(false);
+            return;
+        }
+
+        if (e.key === "Escape") {
             setEditText(todo.title);
             setIsEditing(false);
         }
@@ -42,14 +34,6 @@ export default function TodoItem({ todo }: TodoItemProps) {
         setIsEditing(false);
     }
 
-    function handleToggle() {
-        dispatch(toggleTodo(todo.id));
-    }
-
-    function handleDelete() {
-        dispatch(deleteTodo(todo.id));
-    }
-
     return (
         <div className="group flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-2 sm:py-3 
              border border-gray-200 hover:bg-gray-50 transition-colors w-full 
@@ -58,7 +42,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
                 <input
                     className="flex-1 p-1 sm:p-2 text-sm sm:text-base rounded outline-none"
                     value={editText}
-                    onChange={handleChange}
+                    onChange={(e) => setEditText(e.target.value)}
                     onKeyDown={handleKeyDown}
                     onBlur={handleBlur}
                     autoFocus
@@ -69,7 +53,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
                         <input
                             type="checkbox"
                             checked={todo.completed}
-                            onChange={handleToggle}
+                            onChange={() => dispatch(toggleTodo(todo.id))}
                             className="peer hidden"
                         />
                         <span className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:border-green-500 peer-checked:after:content-['✓'] peer-checked:after:text-emerald-500 peer-checked:after:text-lg
@@ -87,7 +71,10 @@ export default function TodoItem({ todo }: TodoItemProps) {
                         </span>
                     </label>
                     <span
-                        onDoubleClick={handleDoubleClick}
+                        onDoubleClick={() => {
+                            setIsEditing(true);
+                            setEditText(todo.title);
+                        }}
                         className={cn(
                             "flex-1 min-w-0 whitespace-normal break-words text-sm sm:text-base cursor-pointer pr-2 text-gray-800",
                             {
@@ -98,7 +85,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
                         {todo.title}
                     </span>
                     <button
-                        onClick={handleDelete}
+                        onClick={() => dispatch(deleteTodo(todo.id))}
                         className="hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity text-lg sm:text-xl flex-shrink-0 w-6 h-6 flex items-center justify-center"
                     >
                         X
