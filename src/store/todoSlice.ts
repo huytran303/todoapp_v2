@@ -25,8 +25,6 @@ const todoSlice = createSlice({
                 completed: false,
             };
             state.items.push(todo);
-
-            // Persist to localStorage
             localStorage.setItem("todos", JSON.stringify(state.items));
         },
 
