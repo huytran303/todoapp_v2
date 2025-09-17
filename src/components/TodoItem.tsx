@@ -34,6 +34,11 @@ export default function TodoItem({ todo }: TodoItemProps) {
         setIsEditing(false);
     }
 
+    function handleDoubleClick() {
+        setIsEditing(true);
+        setEditText(todo.title);
+    }
+
     return (
         <div className="group flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-2 sm:py-3 
              border border-gray-200 hover:bg-gray-50 transition-colors w-full 
@@ -71,10 +76,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
                         </span>
                     </label>
                     <span
-                        onDoubleClick={() => {
-                            setIsEditing(true);
-                            setEditText(todo.title);
-                        }}
+                        onDoubleClick={handleDoubleClick}
                         className={cn(
                             "flex-1 min-w-0 whitespace-normal break-words text-sm sm:text-base cursor-pointer pr-2 text-gray-800",
                             {
